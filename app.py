@@ -4,22 +4,18 @@ from transformers import AutoTokenizer, BertForSequenceClassification
 import pandas as pd
 import plotly.express as px
 
-# --- PAGE CONFIGURATION (Now set dynamically) ---
-# We set the initial theme based on the session state
-if 'dark_mode' not in st.session_state:
-    st.session_state['dark_mode'] = False # Default to light mode
-
+# --- PAGE CONFIGURATION ---
+# The theme is now controlled by the config.toml file
 st.set_page_config(
     page_title="SafeGuard AI - Bullying Detector",
     page_icon="🛡️",
     layout="centered",
-    initial_sidebar_state="auto",
 )
 
-
-# --- CUSTOM CSS (Remains the same) ---
+# --- CUSTOM CSS FOR A BETTER UI ---
 st.markdown("""
 <style>
+    /* Making text area and button more visible in both themes */
     .stTextArea textarea {
         border: 2px solid #4A90E2;
         border-radius: 10px;
@@ -37,6 +33,7 @@ st.markdown("""
     .stButton>button:hover {
         background-color: #357ABD;
     }
+    /* Styling for the result cards */
     .result-card {
         padding: 20px;
         border-radius: 10px;
@@ -58,7 +55,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 
-# --- MODEL AND TOKENIZER LOADING (Remains the same) ---
+# --- MODEL AND TOKENIZER LOADING ---
 @st.cache_resource
 def load_model():
     model_path = "./BullyingDeploymentPackage/final_model_v2" # Using the improved v2 model
@@ -74,7 +71,7 @@ def load_model():
 model, tokenizer = load_model()
 
 
-# --- PREDICTION FUNCTION (Remains the same) ---
+# --- PREDICTION FUNCTION ---
 def predict(text):
     if model is None or tokenizer is None:
         return None, None
@@ -89,36 +86,7 @@ def predict(text):
     return predicted_class_id, confidence_scores
 
 
-# --- NEW: SIDEBAR FOR THEME TOGGLE ---
-with st.sidebar:
-    st.header("Settings")
-    # The toggle switch for dark mode
-    st.session_state['dark_mode'] = st.toggle('Enable Dark Mode', value=st.session_state['dark_mode'])
-
-# --- DYNAMICALLY APPLY THEME BASED ON TOGGLE ---
-# This part is a bit of a "hack" for Streamlit but works well.
-# It uses JavaScript to change the theme without a full page reload.
-if st.session_state['dark_mode']:
-    st.markdown("""
-        <script>
-            const elements = window.parent.document.querySelectorAll('.stApp');
-            if (elements.length > 0) {
-                elements[0].setAttribute('data-theme', 'dark');
-            }
-        </script>
-    """, unsafe_allow_html=True)
-else:
-    st.markdown("""
-        <script>
-            const elements = window.parent.document.querySelectorAll('.stApp');
-            if (elements.length > 0) {
-                elements[0].setAttribute('data-theme', 'light');
-            }
-        </script>
-    """, unsafe_allow_html=True)
-
-
-# --- MAIN APP INTERFACE (Remains the same) ---
+# --- MAIN APP INTERFACE ---
 st.title("🛡️ SafeGuard AI")
 st.subheader("A Real-Time Bullying and Toxicity Detector")
 st.markdown("Enter any text below to check if it contains harmful content. This tool is built on a fine-tuned BERT model to help promote safer online interactions.")
