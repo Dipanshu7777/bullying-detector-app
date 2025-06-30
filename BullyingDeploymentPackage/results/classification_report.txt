@@ -1,0 +1,8 @@
+              precision    recall  f1-score   support
+
+Non-Bullying       0.94      0.84      0.89      2771
+    Bullying       0.86      0.95      0.90      2771
+
+    accuracy                           0.89      5542
+   macro avg       0.90      0.89      0.89      5542
+weighted avg       0.90      0.89      0.89      5542
